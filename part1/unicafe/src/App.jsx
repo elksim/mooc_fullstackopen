@@ -22,17 +22,17 @@ const Statistics = ({ bad, neutral, good }) => {
 			<>
 				<h2>statistics</h2>
 				<table>
-					<tbody>
-						{StatisticLine("good", good)}
-						{StatisticLine("neutral", neutral)}
-						{StatisticLine("bad", bad)}
-						{StatisticLine("total", total)}
-						{StatisticLine(
-							"average",
-							(good - bad) / (bad + neutral + good)
-						)}
-						{StatisticLine("positive", good / total)}
-					</tbody>
+                    <tbody>
+					{StatisticLine("good", good)}
+					{StatisticLine("neutral", neutral)}
+					{StatisticLine("bad", bad)}
+					{StatisticLine("total", total)}
+					{StatisticLine(
+						"average",
+						(good - bad) / (bad + neutral + good)
+					)}
+					{StatisticLine("positive", good / total)}
+                    </tbody>
 				</table>
 			</>
 		);
