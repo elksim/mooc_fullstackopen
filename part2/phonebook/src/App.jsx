@@ -1,5 +1,54 @@
 import { useState } from "react";
 
+const Filter = ({ handleFilterChange }) => {
+	return (
+		<>
+			filter shown with <input onChange={handleFilterChange} />
+		</>
+	);
+};
+
+const Persons = ({ persons, filter }) => {
+	return (
+		<>
+			{persons
+				.filter((person) =>
+					person.name.toLowerCase().startsWith(filter)
+				)
+				.map((person) => (
+					<div key={person.name}>
+						{person.name} {person.number}
+					</div>
+				))}
+		</>
+	);
+};
+
+const Form = ({
+	handleNameChange,
+	handleNumberChange,
+	newName,
+	newNumber,
+	addName,
+}) => {
+	return (
+		<>
+			<form onSubmit={addName}>
+				<div>
+					name: <input value={newName} onChange={handleNameChange} />
+				</div>
+				<div>
+					number:{" "}
+					<input value={newNumber} onChange={handleNumberChange} />
+				</div>
+				<div>
+					<button type="submit">add</button>
+				</div>
+			</form>
+		</>
+	);
+};
+
 const App = () => {
 	const [persons, setPersons] = useState([
 		{ name: "Arto Hellas", number: "040-123456", id: 1 },
@@ -37,31 +86,18 @@ const App = () => {
 	return (
 		<div>
 			<h1>Phonebook</h1>
-			filter shown with <input onChange={handleFilterChange} />
+			<Filter handleFilterChange={handleFilterChange} />
 			<h2> add a new </h2>
-			<form onSubmit={addName}>
-				<div>
-					name: <input value={newName} onChange={handleNameChange} />
-				</div>
-				<div>
-					number:{" "}
-					<input value={newNumber} onChange={handleNumberChange} />
-				</div>
-				<div>
-					<button type="submit">add</button>
-				</div>
-			</form>
+			<Form
+				handleNameChange={handleNameChange}
+				handleNumberChange={handleNumberChange}
+				newName={newName}
+				newNumber={newNumber}
+				addName={addName}
+			/>
 			<h2>Numbers</h2>
-			{persons
-				.filter((person) =>
-					person.name.toLowerCase().startsWith(filter)
-				)
-				.map((person) => (
-					<div key={person.name}>
-						{person.name} {person.number}
-					</div>
-				))}
-			debug: {filter}
+			<br />
+			<Persons persons={persons} filter={filter} />
 		</div>
 	);
 };
