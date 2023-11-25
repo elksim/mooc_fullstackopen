@@ -9,7 +9,39 @@ const Filter = ({ filter, handleFilter }) => {
 	);
 };
 
-const SingleResult = ({ result }) => {
+const Weather = ({ country, apiKey }) => {
+	const [weather, setWeather] = useState(null);
+
+	useEffect(() => {
+		let url = `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${country.name.common}&days=1&aqi=no&alerts=no`;
+		let request = axios.get(url).then((response) => {
+			{
+				let data = response.data;
+				setWeather({
+					temperature: data.current.temp_c,
+					windSpeed: data.current.wind_kph,
+					icon: data.current.condition.icon,
+					text: data.current.condition.text,
+				});
+			}
+		});
+	}, []);
+	if (!weather) {
+		return <>loading weather</>;
+	} else {
+		console.log(`${weather.temperature}`);
+	}
+
+	return (
+		<>
+			temperature: {weather.temperature} Celcius <br />
+			<img src={weather.icon} alt={weather.text} /> <br />
+			wind speed:{weather.windSpeed} m/s
+		</>
+	);
+};
+
+const SingleResult = ({ result, apiKey }) => {
 	const [country, setCountry] = useState(null);
 
 	useEffect(() => {
@@ -41,18 +73,20 @@ const SingleResult = ({ result }) => {
 				src={country.flags.png}
 				alt={`Flag of ${country.name.common}`}
 			/>
+			<br />
+			<Weather country={country} apiKey={apiKey} />
 		</>
 	);
 };
 
-const Results = ({ results }) => {
+const Results = ({ results, setFilter, apiKey }) => {
 	if (results.length == 0) {
 		return null;
 	} else if (results.length == 1) {
 		console.log(`result.length == 1!`);
 		return (
 			<>
-				<SingleResult result={results[0]} />
+				<SingleResult result={results[0]} apiKey={apiKey} />
 			</>
 		);
 	} else if (results.length <= 10) {
@@ -60,7 +94,16 @@ const Results = ({ results }) => {
 			<>
 				<ul>
 					{results.map((result) => (
-						<li key={result.name.common}>{result.name.common}</li>
+						<li key={result.name.common}>
+							{result.name.common}
+							<button
+								onClick={() =>
+									setFilter(`${result.name.common}`)
+								}
+							>
+								view
+							</button>
+						</li>
 					))}
 				</ul>
 			</>
@@ -71,20 +114,22 @@ const Results = ({ results }) => {
 };
 
 const App = () => {
+	const apiKey = import.meta.env.VITE_SOME_KEY;
 	const [filter, setFilter] = useState("");
 	const [countries, setCountries] = useState([]);
 
 	useEffect(() => {
-		axios
-			.get("https://studies.cs.helsinki.fi/restcountries/api/all")
-			.then((response) => {
-				console.log("fetching countries from online api");
-				setCountries(response.data);
-			});
-		// axios.get("http://localhost:3002/countries").then((response) => {
-		// 	console.log("fetching countries from local db.json");
-		// 	setCountries(response.data);
-		// });
+		// axios
+		// 	.get("https://studies.cs.helsinki.fi/restcountries/api/all")
+		// 	.then((response) => {
+		// 		console.log("fetching countries from online api");
+		// 		setCountries(response.data);
+		// 	});
+		axios.get("http://localhost:3002/countries").then((response) => {
+			console.log("fetching countries from local db.json");
+			console.log(`${response.data.length}`);
+			setCountries(response.data);
+		});
 	}, []);
 
 	const handleFilter = (event) => {
@@ -93,16 +138,21 @@ const App = () => {
 
 	let resultCountries = countries.filter(
 		(country) =>
-			country.name.common.toLowerCase().includes(filter) ||
-			country.name.official.toLowerCase().includes(filter)
+			country.name.common.toLowerCase().includes(filter.toLowerCase()) ||
+			country.name.official.toLowerCase().includes(filter.toLowerCase())
 	);
-	console.log(`${resultCountries}`);
-
+	console.log(`filter: ${filter}`);
+	console.log(`result country length: ${resultCountries.length}`);
 	return (
 		<>
-			<input onChange={handleFilter} />
+			<input value={filter} onChange={handleFilter} />
 			<br />
-			<Results results={resultCountries} />
+			<Results
+				results={resultCountries}
+				setFilter={setFilter}
+				apiKey={apiKey}
+			/>
+			<br />
 		</>
 	);
 };
