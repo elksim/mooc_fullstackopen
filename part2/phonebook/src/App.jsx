@@ -53,11 +53,35 @@ const Form = ({
 	);
 };
 
+const Notification = ({ message }) => {
+	if (message == null) {
+		return null;
+	}
+	const style = {
+		background: "lightgray",
+		fontSize: "20px",
+		borderStyle: "solid",
+		borderColor: "green",
+		borderRadius: "5px",
+		padding: "10px",
+		marginBottom: "10px",
+	};
+	if (message.color == "red") {
+		style.borderColor = "red";
+	}
+	return (
+		<>
+			<div style={style}>{message.text}</div>
+		</>
+	);
+};
+
 const App = () => {
 	const [persons, setPersons] = useState([]);
 	const [newName, setNewName] = useState("");
 	const [newNumber, setNewNumber] = useState("");
 	const [filter, setFilter] = useState("");
+	const [message, setMessage] = useState(null);
 
 	const handleNameChange = (event) => {
 		setNewName(event.target.value);
@@ -75,6 +99,10 @@ const App = () => {
 				setPersons(persons.concat(returnedPerson));
 				setNewName("");
 				setNewNumber("");
+				setMessage({
+					text: `Added ${returnedPerson.name} to the phonebook`,
+				});
+				setTimeout(() => setMessage(null), 5000);
 			});
 		} else {
 			if (
@@ -95,6 +123,10 @@ const App = () => {
 					})
 				);
 			});
+			setMessage({
+				text: `Updated ${changedPerson.name}'s phone number.`,
+			});
+			setTimeout(() => setMessage(null), 5000);
 		}
 	};
 
@@ -106,12 +138,19 @@ const App = () => {
 		if (!res) {
 			return;
 		}
-		personService.delete(personToDelete).then((response) => {
-			console.log(response);
-			setPersons(
-				persons.filter((person) => person.id != personToDelete.id)
-			);
-		});
+		personService
+			.delete(personToDelete)
+			.then((response) => {
+				console.log(response);
+			})
+			.catch((error) => {
+				setMessage({
+					text: `${personToDelete.name} was already removed from the server.`,
+					color: "red",
+				});
+			});
+		setTimeout(() => setMessage(null), 5000);
+		setPersons(persons.filter((person) => person.id != personToDelete.id));
 	};
 
 	const handleFilterChange = (event) => {
@@ -130,6 +169,7 @@ const App = () => {
 	return (
 		<div>
 			<h1>Phonebook</h1>
+			<Notification message={message} />
 			<Filter handleFilterChange={handleFilterChange} />
 			<h2> add a new </h2>
 			<Form
