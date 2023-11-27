@@ -93,6 +93,7 @@ const App = () => {
 
 	const addPerson = (event) => {
 		event.preventDefault();
+        //todo fix: this doesn't prevent browser1 and browser2 from adding the same person
 		if (!persons.some((person) => person.name == newName)) {
 			let newPerson = { name: newName, number: newNumber };
 			personService.create(newPerson).then((returnedPerson) => {
