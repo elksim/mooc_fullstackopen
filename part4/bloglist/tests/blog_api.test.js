@@ -116,6 +116,18 @@ describe("when there is initially one user and many blogs", () => {
 			.expect(400);
 	});
 
+	test("adding blog without authorization fails with the correct status message", async () => {
+		let blogsBefore = Blog.find({});
+		const newBlog = {
+			title: "Space Craze 2000",
+			author: "Rick Reed",
+			url: "http://fakewebsite.com/123",
+		};
+		let reponse = await api.post("/api/blogs/").send(newBlog).expect(401);
+		let blogsAfter = Blog.find({});
+		expect(blogsAfter.length).toEqual(blogsBefore.length);
+	});
+
 	test("blog delete by id works", async () => {
 		let blogsBefore = await helper.blogsInDb();
 		let notDeletedBlog = blogsBefore[1];
@@ -150,8 +162,6 @@ describe("when there is initially one user and many blogs", () => {
 		expect(updatedBlog.body.url).toEqual(newBlog.url);
 		expect(updatedBlog.body.likes).toEqual(newBlog.likes);
 	});
-
-	test("blog tst", async () => {});
 
 	afterAll(async () => {
 		await mongoose.connection.close();
