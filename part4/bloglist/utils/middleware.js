@@ -16,7 +16,6 @@ const unknownEndpoint = (request, response) => {
 
 const tokenExtractor = (request, response, next) => {
 	let authorization = request.get("authorization");
-    console.log('authorization: ', authorization);
 	if (authorization && authorization.startsWith("Bearer ")) {
 		request.token = authorization.replace("Bearer ", "");
 		logger.info("setting request.token to", request.token);
@@ -27,11 +26,8 @@ const tokenExtractor = (request, response, next) => {
 };
 
 const userExtractor = async (request, response, next) => {
-	console.log("request.token: ", request.token);
 	if (request.token !== undefined) {
 		let decodedToken = jwt.verify(request.token, process.env.SECRET);
-		console.log("decodedToken: ", decodedToken);
-		console.log("decodedToken.id:", decodedToken.id);
 		if (decodedToken.id !== undefined) {
 			const user = await User.findById(decodedToken.id);
 			request.user = user;
