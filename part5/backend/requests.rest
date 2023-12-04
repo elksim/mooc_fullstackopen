@@ -1,0 +1,13 @@
+###
+POST http://localhost:3005/api/users/
+Content-Type: application/json
+{
+    "user": "rootuser",
+    "username": "rootusername",
+    "password": "rootpassword"
+}
+###
+GET http://localhost:3005/api/users/
+###
+GET http://localhost:3005/api/blogs/
+Authorization: Bearer 123
