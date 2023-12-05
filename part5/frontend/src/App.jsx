@@ -39,7 +39,7 @@ const App = () => {
 			<>
 				<br />
 				{blogs.map((blog) => (
-					<Blog key={blog.id} blog={blog} />
+					<Blog key={blog.id} blog={blog} likeBlog={likeBlog} />
 				))}
 				<br />
 			</>
@@ -79,7 +79,7 @@ const App = () => {
 					</button>
 					<br />
 					<Toggleable buttonLabel="new blog">
-						<BlogForm createBlog={addBlog} />
+						<BlogForm createBlog={addBlog}/>
 					</Toggleable>
 					{blogList()}
 				</>
@@ -92,20 +92,29 @@ const App = () => {
 		setBlogs(blogs.concat(returnedBlog));
 	};
 
-	const handleCreateBlog = async (event) => {
-		event.preventDefault();
-		const response = await blogService.createBlog({ title, author, url });
+	const likeBlog = async (blog) => {
+		const likedBlog = await blogService.likeBlog(blog);
 
-		if (response.status == 201) {
-			setBlogs(blogs.concat(response.data));
-			const { title, author, url } = response.data;
-			setNotification(`a new blog ${title} by ${author} added`);
-			setBlogFormVisible(false);
-			setTimeout(() => {
-				setNotification(null);
-			}, 5000);
-		}
+		let newBlogs = blogs.map((blog) =>
+			blog.id != likedBlog.id ? blog : likedBlog
+		);
+		setBlogs(newBlogs);
 	};
+
+	// const handleCreateBlog = async (event) => {
+	// 	event.preventDefault();
+	// 	const response = await blogService.createBlog({ title, author, url });
+
+	// 	if (response.status == 201) {
+	// 		setBlogs(blogs.concat(response.data));
+	// 		const { title, author, url } = response.data;
+	// 		setNotification(`a new blog ${title} by ${author} added`);
+	// 		setBlogFormVisible(false);
+	// 		setTimeout(() => {
+	// 			setNotification(null);
+	// 		}, 5000);
+	// 	}
+	// };
 
 	const handleLogin = async (event) => {
 		event.preventDefault();
@@ -156,15 +165,6 @@ const App = () => {
 			<h2>blogs</h2>
 			<Notification message={notification} color={notificationColor} />
 			{mainElement()}
-			DEBUG: <br />
-			username: {username}
-			<br />
-			password: {password}
-			<br />
-			user: {user !== null ? user.username : null}
-			<br />
-			notification: {notification}
-			<br />
 		</div>
 	);
 };

@@ -7,6 +7,18 @@ const setToken = (newToken) => {
 	token = `Bearer ${newToken}`;
 };
 
+const likeBlog = async (blog) => {
+	let newBlog = {
+		author: blog.author,
+		title: blog.title,
+		url: blog.url,
+		user: blog.user.id,
+		likes: blog.likes + 1,
+	};
+	const response = await axios.put(baseUrl.concat("/", blog.id), newBlog);
+	return response.data;
+};
+
 const create = async (newBlog) => {
 	const config = { headers: { Authorization: token } };
 	try {
@@ -25,4 +37,4 @@ const getAll = async () => {
 	return response.data;
 };
 
-export default { getAll, setToken, create };
+export default { getAll, setToken, create, likeBlog };
