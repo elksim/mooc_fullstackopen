@@ -9,7 +9,12 @@ const BlogForm = ({ createBlog }) => {
 	const addBlog = (event) => {
 		event.preventDefault();
 		let blogObject = { author: author, title: title, url: url };
-		createBlog(blogObject);
+		let res = createBlog(blogObject);
+		if (res) {
+			setAuthor("");
+			setTitle("");
+			setUrl("");
+		}
 	};
 
 	return (
@@ -28,7 +33,11 @@ const BlogForm = ({ createBlog }) => {
 					onChange={({ target }) => setTitle(target.value)}
 				/>
 				<br />
-				url: <input onChange={({ target }) => setUrl(target.value)} />
+				url:{" "}
+				<input
+					value={url}
+					onChange={({ target }) => setUrl(target.value)}
+				/>
 				<br />
 				<button type="submit">submit</button>
 			</form>

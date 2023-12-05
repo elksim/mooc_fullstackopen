@@ -8,13 +8,8 @@ const Notification = ({ message, color }) => {
 		borderRadius: "5px",
 		background: "lightgrey",
 		padding: "10px",
+		color: color,
 	};
-	if (color === "green") {
-		style.color = "green";
-	}
-	if (color === "red") {
-		style.color = "red";
-	}
 
 	return (
 		<>

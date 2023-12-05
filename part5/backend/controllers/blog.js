@@ -62,7 +62,7 @@ blogRouter.delete("/:id", async (request, response) => {
 			error: "blog can only be deleted by the user that created it",
 		});
 	}
-	await Blog.findByIdAndDelete(request.params.id);
+	let deletedBlog = await Blog.findByIdAndDelete(request.params.id);
 	user.blog = user.blogs.filter((blog) => blog.id != deletedBlog.id);
 	response.status(204).end();
 });

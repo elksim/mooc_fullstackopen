@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 import Toggleable from "./components/Toggleable";
@@ -10,6 +10,8 @@ import blogService from "./services/blogs";
 import loginService from "./services/login";
 
 const App = () => {
+	const blogFormRef = useRef();
+
 	const [notification, setNotification] = useState(null);
 	const [notificationColor, setNotificationColor] = useState("");
 
@@ -38,9 +40,17 @@ const App = () => {
 		return (
 			<>
 				<br />
-				{blogs.map((blog) => (
-					<Blog key={blog.id} blog={blog} likeBlog={likeBlog} />
-				))}
+				{blogs
+					.sort((a, b) => b.likes - a.likes)
+					.map((blog) => (
+						<Blog
+							key={blog.id}
+							blog={blog}
+							likeBlog={likeBlog}
+							username={user.username}
+							deleteBlog={deleteBlog}
+						/>
+					))}
 				<br />
 			</>
 		);
@@ -78,8 +88,8 @@ const App = () => {
 						logout
 					</button>
 					<br />
-					<Toggleable buttonLabel="new blog">
-						<BlogForm createBlog={addBlog}/>
+					<Toggleable buttonLabel="new blog" ref={blogFormRef}>
+						<BlogForm createBlog={addBlog} />
 					</Toggleable>
 					{blogList()}
 				</>
@@ -88,33 +98,44 @@ const App = () => {
 	};
 
 	const addBlog = async (blogObject) => {
-		const returnedBlog = await blogService.create(blogObject);
-		setBlogs(blogs.concat(returnedBlog));
+		blogFormRef.current.toggleVisibility();
+		try {
+			const returnedBlog = await blogService.create(blogObject);
+			setBlogs(blogs.concat(returnedBlog));
+			setNotification(
+				`added blog ${returnedBlog.title} by ${returnedBlog.author}`
+			);
+			setNotificationColor("green");
+			setTimeout(() => {
+				setNotification(null);
+			}, 5000);
+			return true;
+		} catch {
+			return false;
+		}
 	};
 
 	const likeBlog = async (blog) => {
 		const likedBlog = await blogService.likeBlog(blog);
-
 		let newBlogs = blogs.map((blog) =>
-			blog.id != likedBlog.id ? blog : likedBlog
+			blog.id !== likedBlog.id ? blog : likedBlog
 		);
 		setBlogs(newBlogs);
 	};
 
-	// const handleCreateBlog = async (event) => {
-	// 	event.preventDefault();
-	// 	const response = await blogService.createBlog({ title, author, url });
-
-	// 	if (response.status == 201) {
-	// 		setBlogs(blogs.concat(response.data));
-	// 		const { title, author, url } = response.data;
-	// 		setNotification(`a new blog ${title} by ${author} added`);
-	// 		setBlogFormVisible(false);
-	// 		setTimeout(() => {
-	// 			setNotification(null);
-	// 		}, 5000);
-	// 	}
-	// };
+	const deleteBlog = async (blog) => {
+		if (user !== null) {
+			await blogService.delete(blog.id);
+			const deletedId = blog.id;
+			let newBlogs = blogs.filter((blog) => blog.id !== deletedId);
+			setBlogs(newBlogs);
+			setNotificationColor("darkOrange");
+			setNotification(`deleted blog ${blog.title} by ${blog.author}`);
+			setTimeout(() => {
+				setNotification(null);
+			}, 5000);
+		}
+	};
 
 	const handleLogin = async (event) => {
 		event.preventDefault();

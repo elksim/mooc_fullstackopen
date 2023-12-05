@@ -1,13 +1,17 @@
 ###
 POST http://localhost:3005/api/users/
 Content-Type: application/json
+
 {
-    "user": "rootuser",
-    "username": "rootusername",
-    "password": "rootpassword"
+    "user": "saruman the white",
+    "username": "saruman",
+    "password": "password"
 }
 ###
 GET http://localhost:3005/api/users/
 ###
 GET http://localhost:3005/api/blogs/
 Authorization: Bearer 123
+###
+DELETE http://localhost:3005/api/blogs/656d5b838a89ae049eeac6e2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3R1c2VybmFtZSIsImlkIjoiNjU2ODFhZDY0OWIwOTA4NzUzMDFkZDExIiwiaWF0IjoxNzAxNzU0NjMxfQ.mfhw6VytzgZaV2zAAjGZTr6XeYyz1tcMVz2YbU6Xg4M

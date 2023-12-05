@@ -7,6 +7,11 @@ const setToken = (newToken) => {
 	token = `Bearer ${newToken}`;
 };
 
+const getAll = async () => {
+	const response = await axios.get(baseUrl);
+	return response.data;
+};
+
 const likeBlog = async (blog) => {
 	let newBlog = {
 		author: blog.author,
@@ -32,9 +37,9 @@ const create = async (newBlog) => {
 	}
 };
 
-const getAll = async () => {
-	const response = await axios.get(baseUrl);
-	return response.data;
+const _delete = async (id) => {
+	const config = { headers: { Authorization: token } };
+	let response = await axios.delete(`${baseUrl}/${id}`, config);
 };
 
-export default { getAll, setToken, create, likeBlog };
+export default { getAll, setToken, create, likeBlog, delete: _delete };
