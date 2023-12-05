@@ -1,5 +1,4 @@
 const Notification = ({ message, color }) => {
-    console.log(`Notification called with ${message} and ${color}`);
 	if (message === null) {
 		return null;
 	}

@@ -1,28 +1,25 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+import Toggleable from "./components/Toggleable";
 import Blog from "./components/Blog";
 import Notification from "./components/Notification";
+import BlogForm from "./components/BlogForm";
 
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 
 const App = () => {
-	// const [notification, setNotification] = useState({
-	// 	message: "initial notification",
-	// 	color: "red",
-	// });
 	const [notification, setNotification] = useState(null);
 	const [notificationColor, setNotificationColor] = useState("");
-	const [blogs, setBlogs] = useState([]);
+
 	const [username, setUsername] = useState([]);
 	const [password, setPassword] = useState([]);
 	const [user, setUser] = useState(null);
-	//create Blog state
-	const [author, setAuthor] = useState("");
-	const [title, setTitle] = useState("");
-	const [url, setUrl] = useState("");
 
+	const [blogs, setBlogs] = useState([]);
+
+	//
 	useEffect(() => {
 		blogService.getAll().then((blogs) => setBlogs(blogs));
 	}, []);
@@ -37,31 +34,6 @@ const App = () => {
 		}
 	}, []);
 
-	const createBlogForm = () => {
-		return (
-			<>
-				<form onSubmit={handleCreateBlog}>
-					author:{" "}
-					<input
-						value={author}
-						onChange={({ target }) => setAuthor(target.value)}
-					/>
-					<br />
-					title:{" "}
-					<input
-						value={title}
-						onChange={({ target }) => setTitle(target.value)}
-					/>
-					<br />
-					url:{" "}
-					<input onChange={({ target }) => setUrl(target.value)} />
-					<br />
-					<button type="submit">submit</button>
-				</form>
-			</>
-		);
-	};
-
 	const blogList = () => {
 		return (
 			<>
@@ -75,7 +47,7 @@ const App = () => {
 	};
 
 	const mainElement = () => {
-		//displays either the loginForm or, if a user is logged in already, a list of blogs
+		//displays either the login form or, if a user is logged in already, a list of blogs
 		if (user === null) {
 			return (
 				<>
@@ -105,11 +77,19 @@ const App = () => {
 					<button onClick={(event) => handleLogout(event)}>
 						logout
 					</button>
-					{createBlogForm()}
+					<br />
+					<Toggleable buttonLabel="new blog">
+						<BlogForm createBlog={addBlog} />
+					</Toggleable>
 					{blogList()}
 				</>
 			);
 		}
+	};
+
+	const addBlog = async (blogObject) => {
+		const returnedBlog = await blogService.create(blogObject);
+		setBlogs(blogs.concat(returnedBlog));
 	};
 
 	const handleCreateBlog = async (event) => {
@@ -120,6 +100,7 @@ const App = () => {
 			setBlogs(blogs.concat(response.data));
 			const { title, author, url } = response.data;
 			setNotification(`a new blog ${title} by ${author} added`);
+			setBlogFormVisible(false);
 			setTimeout(() => {
 				setNotification(null);
 			}, 5000);
@@ -172,6 +153,7 @@ const App = () => {
 
 	return (
 		<div>
+			<h2>blogs</h2>
 			<Notification message={notification} color={notificationColor} />
 			{mainElement()}
 			DEBUG: <br />
