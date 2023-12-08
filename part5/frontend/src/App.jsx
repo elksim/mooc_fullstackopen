@@ -38,7 +38,7 @@ const App = () => {
 
 	const blogList = () => {
 		return (
-			<>
+			<div>
 				<br />
 				{blogs
 					.sort((a, b) => b.likes - a.likes)
@@ -52,7 +52,7 @@ const App = () => {
 						/>
 					))}
 				<br />
-			</>
+			</div>
 		);
 	};
 
@@ -64,12 +64,14 @@ const App = () => {
 					<form id="loginForm" onSubmit={handleLogin}>
 						username
 						<input
+							id="username"
 							value={username}
 							onChange={({ target }) => setUsername(target.value)}
 						/>
 						<br />
 						password
 						<input
+							id="password"
 							value={password}
 							onChange={({ target }) => {
 								setPassword(target.value);

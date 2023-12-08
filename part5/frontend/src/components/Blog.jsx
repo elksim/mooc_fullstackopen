@@ -7,8 +7,6 @@ const Blog = ({ blog, likeBlog, username, deleteBlog }) => {
 	const showWhenVisible = { display: detailsVisible ? "" : "none" };
 	const hideWhenVisible = { display: detailsVisible ? "none" : "" };
 
-	// console.log("username ", username);
-	// console.log("blog", blog);
 	const deleteVisible = {
 		display: blog.user.username === username ? "" : "none",
 	};
@@ -28,7 +26,7 @@ const Blog = ({ blog, likeBlog, username, deleteBlog }) => {
 	};
 
 	return (
-		<div style={blogStyle}>
+		<div style={blogStyle} className="blog">
 			{blog.title} - {blog.author}{" "}
 			<span style={hideWhenVisible}>
 				<button
@@ -50,8 +48,9 @@ const Blog = ({ blog, likeBlog, username, deleteBlog }) => {
 			</span>
 			<div style={showWhenVisible}>
 				{blog.url} <br />
-				likes {blog.likes}{" "}
+				likes <span id="likeCount">{blog.likes}</span>{" "}
 				<button
+					id="like"
 					onClick={() => {
 						likeBlog(blog);
 					}}
