@@ -12,6 +12,12 @@ const app = express();
 
 mongoose.set("strictQuery", false);
 
+if (process.env.NODE_ENV === "test") {
+	console.log("adding testingRouter");
+	const testingRouter = require("./controllers/testing");
+	app.use("/api/testing", testingRouter);
+}
+
 logger.info("connecting to", config.MONGODB_URI);
 mongoose
 	.connect(config.MONGODB_URI)

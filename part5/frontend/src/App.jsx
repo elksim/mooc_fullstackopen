@@ -61,7 +61,7 @@ const App = () => {
 		if (user === null) {
 			return (
 				<>
-					<form onSubmit={handleLogin}>
+					<form id="loginForm" onSubmit={handleLogin}>
 						username
 						<input
 							value={username}
