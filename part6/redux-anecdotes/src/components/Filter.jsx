@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Filter = () => {
 	const dispatch = useDispatch();
-	const filter = useSelector((state) => state.filter);
+	const filter = useSelector((state) => state.filter.filter);
 
 	const handleChange = (event) => {
 		dispatch(filterChange(event.target.value));
@@ -15,10 +15,7 @@ const Filter = () => {
 
 	return (
 		<div style={style}>
-			filter <input onChange={handleChange} />
-			<br />
-			filter debug: {filter}
-			<br />
+			filter: <input onChange={handleChange} />
 		</div>
 	);
 };
