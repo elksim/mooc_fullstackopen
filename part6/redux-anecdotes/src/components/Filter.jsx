@@ -1,0 +1,26 @@
+import { filterChange } from "../reducers/filterReducer";
+import { useDispatch, useSelector } from "react-redux";
+
+const Filter = () => {
+	const dispatch = useDispatch();
+	const filter = useSelector((state) => state.filter);
+
+	const handleChange = (event) => {
+		dispatch(filterChange(event.target.value));
+	};
+
+	const style = {
+		marginBottom: 10,
+	};
+
+	return (
+		<div style={style}>
+			filter <input onChange={handleChange} />
+			<br />
+			filter debug: {filter}
+			<br />
+		</div>
+	);
+};
+
+export default Filter;

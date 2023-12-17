@@ -17,10 +17,19 @@ const Anecdote = ({ anecdote }) => {
 };
 
 const Anecdotes = () => {
-	const anecdotes = useSelector((state) =>
-		[...state].sort((a, b) => b.votes - a.votes)
-	);
-	
+	const anecdotes = useSelector((state) => {
+		let sortedAnecdotes = [...state.anecdotes].sort(
+			(a, b) => b.votes - a.votes
+		);
+		if (state.filter.length !== 0) {
+			const filter = state.filter;
+			return sortedAnecdotes.filter((anecdote) => {
+				return anecdote.content.toLowerCase().includes(filter);
+			});
+		} else {
+			return sortedAnecdotes;
+		}
+	});
 	return (
 		<>
 			<h2>Anecdotes</h2>
