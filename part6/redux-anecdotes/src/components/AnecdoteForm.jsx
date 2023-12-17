@@ -13,7 +13,7 @@ const AnecdoteForm = () => {
 		const content = event.target.anecdote.value;
 		event.target.anecdote.value = "";
 		dispatch(newAnecdote(content));
-		dispatch(setNotification(`you added ${content}`));
+		dispatch(setNotification(`you added '${content}'`));
 		setTimeout(() => {
 			dispatch(removeNotification());
 		}, 5000);
