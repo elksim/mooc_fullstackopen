@@ -12,6 +12,7 @@
 		"cypress:open": "cypress open"
 	},
 	"dependencies": {
+		"@tanstack/react-query": "^5.17.19",
 		"axios": "^1.4.0",
 		"cypress": "^13.6.1",
 		"npm": "^10.3.0",
