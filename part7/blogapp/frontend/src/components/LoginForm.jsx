@@ -1,77 +1,59 @@
 import { useState } from "react";
-import loginService from "../services/login";
-import blogService from "../services/login";
-import { useNotificationDispatch } from "../NotificationContext";
+import { login } from "../requests";
+import { useSetNotification } from "../NotificationContext";
+import { useUserDispatch } from "../UserContext";
 
-const LoginForm = ({
-	setUser,
-	setUsername,
-	setPassword,
-	username,
-	password,
-}) => {
-	const notificationDispatch = useNotificationDispatch();
+const LoginForm = () => {
+  const setNotification = useSetNotification();
+  const userDispatch = useUserDispatch();
 
-	const handleLogin = async (event) => {
-		event.preventDefault();
-		try {
-			const response = await loginService.login({
-				username,
-				password,
-			});
-			const data = response.data;
-			setUser(response.data);
-			console.log("setting user to ", response.data);
-			blogService.setToken(data.token);
-			console.log(
-				"setting token with blogService.setToekn to ",
-				data.token
-			);
-			window.localStorage.setItem(
-				"loggedBloglistUser",
-				JSON.stringify(response.data)
-			);
-			setUsername("");
-			setPassword("");
-			setNotification(`logged in as ${response.data.username}`);
-			setNotificationColor("green");
-			setTimeout(() => {
-				setNotification(null);
-			}, 5000);
-		} catch {
-			(exception) => {
-				console.log("exception", exception);
-				setNotification("invalid credentials.");
-				setNotificationColor("red");
-				setTimeout(() => {
-					setNotification(null);
-					setNotificationColor(null);
-				}, 5000);
-			};
-		}
-	};
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-	return (
-		<>
-			<form onSubmit={handleLogin}>
-				username
-				<input
-					value={username}
-					onChange={({ target }) => setUsername(target.value)}
-				/>
-				<br />
-				password
-				<input
-					value={password}
-					onChange={({ target }) => {
-						setPassword(target.value);
-					}}
-				/>
-				<br />
-				<button type="submit">login</button>
-			</form>
-		</>
-	);
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await login({
+        username,
+        password,
+      });
+      const data = response.data;
+      userDispatch({ type: "login", payload: data });
+      window.localStorage.setItem(
+        "loggedBloglistUser",
+        JSON.stringify(response.data)
+      );
+      setUsername("");
+      setPassword("");
+      setNotification(`logged in as ${response.data.username}`, null, 2000);
+    } catch {
+      setNotification("invalid credentials.", "error", 2000);
+    }
+  };
+
+  return (
+    <>
+      <form id="loginForm" onSubmit={handleLogin}>
+        username
+        <input
+          id="username"
+          value={username}
+          onChange={({ target }) => setUsername(target.value)}
+        />
+        <br />
+        password
+        <input
+          id="password"
+          value={password}
+          onChange={({ target }) => {
+            setPassword(target.value);
+          }}
+        />
+        <br />
+        <button type="submit">login</button>
+      </form>
+    </>
+  );
 };
 
 export default LoginForm;

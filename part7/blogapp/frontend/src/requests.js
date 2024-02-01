@@ -18,26 +18,17 @@ export const addBlog = async (newBlog) => {
   return response.data;
 };
 
-// export const addBlog = async (newBlog) => {
-//   try {
-//     const response = await axios.post("api/blogs", newBlog, config);
-//     return response.data;
-//   } catch {
-//     (exception) => {
-//       console.log("could not add blog: ", exception);
-//     };
-//   }
-// };
-
 export const updateBlog = async (updatedBlog) => {
-  const response = await axios.put(
-    `api/blogs/${updatedBlog.id}`,
-    updatedBlog,
-    config
-  );
+  const response = await axios.put(`api/blogs/${updatedBlog.id}`, updatedBlog);
   return response.data;
 };
 
 export const deleteBlog = async (blog) => {
+  console.log("config: ", config);
   await axios.delete(`api/blogs/${blog.id}`, config);
+};
+
+export const login = async (credentials) => {
+  const response = await axios.post("/api/login", credentials);
+  return response;
 };

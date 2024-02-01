@@ -37,8 +37,6 @@ const Blog = ({ blog, username }) => {
       return updateBlog(newBlog);
     },
     onSuccess: (likedBlog) => {
-      console.log("onsuccess");
-      console.log("likedBlog: ", likedBlog);
       setNotification(
         `liked blog ${likedBlog.title} by ${likedBlog.author}`,
         null,
