@@ -4,12 +4,25 @@ let config = undefined;
 const setConfig = (newToken) => {
   config = { headers: { Authorization: `Bearer ${newToken}` } };
 };
+
 export const setToken = (newToken) => {
   setConfig(newToken);
 };
 
 export const getAllBlogs = async () => {
-  const response = await axios.get("api/blogs");
+  const response = await axios.get("/api/blogs");
+  return response.data;
+};
+
+export const getAllUsers = async () => {
+  const response = await axios.get("/api/users");
+  return response.data;
+};
+
+export const getUser = async (id) => {
+  console.log("calling getuser");
+  const response = await axios.get(`/api/users/${id}`);
+  console.log("response.data: ", response.data);
   return response.data;
 };
 

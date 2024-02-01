@@ -62,7 +62,7 @@ blogRouter.delete("/:id", async (request, response) => {
     });
   }
   let deletedBlog = await Blog.findByIdAndDelete(request.params.id);
-  user.blog = user.blogs.filter((blog) => blog.id != deletedBlog.id);
+  await User.findByIdAndUpdate(user.id, { $pull: { blogs: deletedBlog._id } });
   response.status(204).end();
 });
 
