@@ -20,3 +20,13 @@ POST http://localhost:3005/api/testing/reset
 DELETE http://localhost:3005/api/blogs/6597652ee15128ec27a3b73e
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3R1c2VybmFtZSIsImlkIjoiNjU3Mjk2MWM4NTYxMWI4OGQ1ZjFjYTgxIiwiaWF0IjoxNzA1MzAwNjk1fQ.2LZfK-QZPSxGgyb1DxID5O8TQlWDRcQUY7bNCNv7N4c
+###
+POST http://localhost:3005/api/blogs/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3R1c2VybmFtZSIsImlkIjoiNjU3Mjk2MWM4NTYxMWI4OGQ1ZjFjYTgxIiwiaWF0IjoxNzA1MzAwNjk1fQ.2LZfK-QZPSxGgyb1DxID5O8TQlWDRcQUY7bNCNv7N4c
+
+{
+    "title": "xdxd1",
+    "author": "xdxd1 author",
+    "url": "xdxd1.com"
+}
