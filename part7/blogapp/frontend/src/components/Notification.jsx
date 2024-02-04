@@ -1,28 +1,24 @@
 import { useNotificationValue } from "../NotificationContext";
 
-const Notification = () => {
-  const notification = useNotificationValue();
-  console.log;
-  if (
-    notification.message === null ||
-    notification.message === undefined ||
-    notification.message === ""
-  ) {
-    return <></>;
-  }
+import { Alert } from "@mui/material";
 
-  const style = {
-    borderStyle: "solid",
-    borderRadius: "5px",
-    background: "lightgrey",
-    padding: "10px",
-    color: notification.type === "error" ? "red" : "green",
-  };
-  return (
-    <>
-      <h3 style={style}>{notification.message}</h3>
-    </>
-  );
+const Notification = () => {
+	const notification = useNotificationValue();
+	console.log;
+	if (
+		notification.message === null ||
+		notification.message === undefined ||
+		notification.message === ""
+	) {
+		return <></>;
+	}
+	return (
+		<>
+			<Alert severity={notification.type !== "error" ? "success" : "error"}>
+				{notification.message}
+			</Alert>
+		</>
+	);
 };
 
 export default Notification;

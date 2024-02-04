@@ -2,26 +2,20 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import { TableCell, TableRow } from "@mui/material";
 
 import { updateBlog, deleteBlog } from "../requests";
 
 import { useSetNotification } from "../NotificationContext";
 
 const Blog = ({ blog, username }) => {
-	const blogStyle = {
-		paddingTop: 10,
-		paddingLeft: 2,
-		border: "solid",
-		borderWidth: 1,
-		marginBottom: 5,
-	};
-
 	return (
-		<div style={blogStyle} className="blog">
-			<Link to={`/blogs/${blog.id}`}>
-				{blog.title} - {blog.author}
-			</Link>
-		</div>
+		<>
+			<TableCell>
+				<Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+			</TableCell>
+			<TableCell>{blog.author}</TableCell>
+		</>
 	);
 };
 

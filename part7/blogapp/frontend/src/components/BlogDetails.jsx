@@ -5,6 +5,8 @@ import { useUserValue } from "../UserContext";
 import { useSetNotification } from "../NotificationContext";
 import { getBlog, updateBlog, deleteBlog, addComment } from "../requests";
 
+import { TextareaAutosize, Button } from "@mui/material";
+
 const CommentForm = ({ blogId }) => {
 	const [comment, setComment] = useState("");
 	const queryClient = useQueryClient();
@@ -21,12 +23,15 @@ const CommentForm = ({ blogId }) => {
 	return (
 		<>
 			<form onSubmit={(event) => handleSubmit(event)}>
-				<textarea
+				<TextareaAutosize
+					label="comment"
 					value={comment}
 					onChange={(event) => setComment(event.target.value)}
 				/>
 				<br />
-				<button type="submit">comment</button>
+				<Button variant="contained" type="submit">
+					comment
+				</Button>
 			</form>
 		</>
 	);

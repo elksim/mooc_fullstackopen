@@ -29,7 +29,7 @@ import { getAllBlogs, getAllUsers, getUser } from "./requests";
 // 						<br />
 // 						<button onClick={(event) => handleLogout(event)}>logout</button>
 // 						<br />
-// 						{props.children}
+// 						{props.children}2
 // 					</>
 // 				)}
 // 			</div>

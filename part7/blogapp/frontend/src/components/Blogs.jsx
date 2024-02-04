@@ -1,8 +1,14 @@
 import { useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
+import {
+	Table,
+	TableBody,
+	TableRow,
+	TableContainer,
+	Paper,
+} from "@mui/material";
 
 import { getAllBlogs } from "../requests";
-
 import { useUserValue } from "../UserContext";
 import Blog from "./Blog";
 import BlogForm from "./BlogForm";
@@ -25,15 +31,19 @@ const Blogs = () => {
 
 	const blogList = () => {
 		return (
-			<div>
-				<br />
-				{blogs
-					.sort((a, b) => b.likes - a.likes)
-					.map((blog) => (
-						<Blog key={blog.id} blog={blog} username={user.username} />
-					))}
-				<br />
-			</div>
+			<TableContainer component={Paper}>
+				<Table>
+					<TableBody>
+						{blogs
+							.sort((a, b) => b.likes - a.likes)
+							.map((blog) => (
+								<TableRow key={blog.id}>
+									<Blog key={blog.id} blog={blog} username={user.username} />
+								</TableRow>
+							))}
+					</TableBody>
+				</Table>
+			</TableContainer>
 		);
 	};
 
